@@ -190,10 +190,10 @@ document.addEventListener("DOMContentLoaded", function(){
   function calculatePrice() {
     let width = parseFloat(widthInput.value) || 0;
     let height = parseFloat(heightInput.value) || 0;
-    let area = (width * height) / 144; // default inches to sq.ft
+    let area = width * height; // ✅ area in square inches
     let selectedPaper = document.querySelector("input[name='paper']:checked");
-    let pricePerSqft = parseFloat(selectedPaper.dataset.price);
-    let totalPrice = (area * pricePerSqft).toFixed(2);
+    let pricePerSqInch = parseFloat(selectedPaper.dataset.price); // ✅ price per sq.inch
+    let totalPrice = (area * pricePerSqInch).toFixed(2);
 
     if (area > 0) {
       addToCartBtn.innerText = "Add to cart - Tk " + totalPrice;
@@ -208,6 +208,7 @@ document.addEventListener("DOMContentLoaded", function(){
   heightInput.addEventListener("input", calculatePrice);
   paperRadios.forEach(r => r.addEventListener("change", calculatePrice));
 
+  // ✅ Run once so default selected paper price is applied
   calculatePrice();
 });
 </script>
