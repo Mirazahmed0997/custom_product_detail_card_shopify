@@ -1,0 +1,215 @@
+<!-- sections/custom-wallpaper.liquid -->
+<div class="custom-wallpaper-form">
+  <h3>{{- product.title }}</h3>
+  <h4>Enter Dimensions (W x H)</h4>
+
+  <!-- Units Selection -->
+  <div class="units">
+    <label><input type="radio" name="unit" value="in" checked> INCHES</label>
+    <label><input type="radio" name="unit" value="cm"> CM</label>
+    <label><input type="radio" name="unit" value="ft"> FEET</label>
+  </div>
+
+  <!-- Dimension Inputs -->
+  <div class="dimension-inputs">
+    <label>
+      Width
+      <input type="number" id="wall_width" min="1" value="10">
+    </label>
+    <span>  x  </span>
+    <label>
+      Height
+      <input type="number" id="wall_height" min="1" value="10">
+    </label>
+  </div>
+
+  <!-- Preview Toggle -->
+  <div class="preview-toggle">
+    <label>Preview Wallpaper 
+      <input type="checkbox" id="preview_toggle">
+    </label>
+  </div>
+
+  <!-- Paper Type -->
+  <div class="paper-types">
+    <h4>Paper Type:</h4>
+    <label>
+      <input type="radio" name="paper" value="standard" data-price="481.49" checked>
+      Standard Paper (Tk 481.49 / sq.ft)
+    </label>
+    <label>
+      <input type="radio" name="paper" value="canvas" data-price="529.64">
+      Canvas Paper (Tk 529.64 / sq.ft)
+    </label>
+    <label>
+      <input type="radio" name="paper" value="premium" data-price="554.33">
+      Premium Paper (Tk 554.33 / sq.ft)
+    </label>
+    <label>
+      <input type="radio" name="paper" value="peel" data-price="616.06">
+      Peel and Stick (Tk 616.06 / sq.ft)
+    </label>
+  </div>
+
+  <!-- Custom Text -->
+  <div class="custom-text">
+    <input type="text" id="custom_note" placeholder="Add your Customization. If any...">
+  </div>
+
+  <!-- Add to Cart -->
+  <button id="add_to_cart" disabled>Add to cart</button>
+  <div>
+    <a href="#">Buy Sample</a> | <a href="#">Add to Wishlist</a>
+  </div>
+</div>
+
+<style>
+  .custom-wallpaper-form { 
+    font-family: sans-serif; 
+    padding:20px; 
+    margin-top:15px; 
+    border-radius:20px; 
+    background:#fafafa; 
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25); 
+    max-width: 600px; /* prevent being too wide */
+    margin-left: auto;
+    margin-right: auto; /* center form */
+  }
+
+  .dimension-inputs { 
+    display: flex; 
+    flex-wrap: wrap; 
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .dimension-inputs input { 
+    width:100px; 
+    padding:10px; 
+    margin:5px; 
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+
+  .paper-types label { 
+    display:block; 
+    margin:8px 0; 
+    font-size: 14px;
+  }
+
+
+
+  .custom-text input {
+  width: 100%;           /* ✅ full width */
+  padding: 10px 12px;    /* spacing inside */
+  border: 1px solid #ddd;
+  border-radius: 8px;    /* rounded corners */
+  font-size: 14px;
+  box-sizing: border-box; /* prevents overflow */
+  margin-top: 10px;
+}
+
+
+
+
+  #add_to_cart { 
+    margin-top: 16px; 
+    padding: 14px 32px; 
+    border-radius: 30px; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 16px; 
+    font-weight: 600; 
+    color: #fff; 
+    background: linear-gradient(135deg, #6a11cb, #2575fc); 
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); 
+    transition: all 0.3s ease; 
+    width: 100%; /* full width on small devices */
+  }
+
+  #add_to_cart:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35); 
+    background: linear-gradient(135deg, #2575fc, #6a11cb); 
+  }
+
+  #add_to_cart:disabled {
+    background: #bbb; 
+    color: #666; 
+    cursor: not-allowed; 
+    box-shadow: none; 
+  }
+
+  /* 📱 Mobile Responsive */
+  @media (max-width: 768px) {
+    .custom-wallpaper-form {
+      padding: 15px;
+    }
+    .dimension-inputs {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .dimension-inputs input {
+      width: 100%; /* full width on mobile */
+      margin: 5px 0;
+    }
+    .paper-types label {
+      font-size: 15px;
+    }
+    #add_to_cart {
+      font-size: 15px;
+      padding: 12px 24px;
+    }
+  }
+
+  /* 📱 Extra Small Devices */
+  @media (max-width: 480px) {
+    .custom-wallpaper-form {
+      padding: 12px;
+      border-radius: 15px;
+    }
+    .dimension-inputs input {
+      font-size: 13px;
+      padding: 8px;
+    }
+    #add_to_cart {
+      font-size: 14px;
+      padding: 10px 20px;
+    }
+  }
+</style>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+  const widthInput = document.getElementById("wall_width");
+  const heightInput = document.getElementById("wall_height");
+  const paperRadios = document.querySelectorAll("input[name='paper']");
+  const addToCartBtn = document.getElementById("add_to_cart");
+
+  function calculatePrice() {
+    let width = parseFloat(widthInput.value) || 0;
+    let height = parseFloat(heightInput.value) || 0;
+    let area = (width * height) / 144; // default inches to sq.ft
+    let selectedPaper = document.querySelector("input[name='paper']:checked");
+    let pricePerSqft = parseFloat(selectedPaper.dataset.price);
+    let totalPrice = (area * pricePerSqft).toFixed(2);
+
+    if (area > 0) {
+      addToCartBtn.innerText = "Add to cart - Tk " + totalPrice;
+      addToCartBtn.disabled = false;
+    } else {
+      addToCartBtn.innerText = "Add to cart";
+      addToCartBtn.disabled = true;
+    }
+  }
+
+  widthInput.addEventListener("input", calculatePrice);
+  heightInput.addEventListener("input", calculatePrice);
+  paperRadios.forEach(r => r.addEventListener("change", calculatePrice));
+
+  calculatePrice();
+});
+</script>
